@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "202325109022",
+    "project_id": "actual-pizzlicious",
+    "storage_bucket": "actual-pizzlicious.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:202325109022:android:972357a830048743ae410f",
+        "android_client_info": {
+          "package_name": "com.example.pizz_lecious"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBE_9gPZzj-tMewht2qPVMcww2GS273xow"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

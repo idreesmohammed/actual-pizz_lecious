@@ -14,6 +14,9 @@ class AuthSignUpClickEvent extends AuthEvent {
 
 class AuthLogOutEvent extends AuthEvent {}
 
-class AuthEmptyEvent extends AuthEvent {}
+class AuthEmptyEvent extends AuthEvent {
+  String message;
+  AuthEmptyEvent({required this.message});
+}
 
 class AuthCheckRequestEvent extends AuthEvent {}

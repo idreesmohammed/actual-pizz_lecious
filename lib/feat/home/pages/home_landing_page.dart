@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pizz_lecious/core/global_set_height_width.dart';
 import 'package:pizz_lecious/core/user_bloc/user_bloc.dart';
+import 'package:pizz_lecious/core/user_bloc/user_event.dart';
+import 'package:pizz_lecious/core/user_bloc/user_state.dart';
 import 'package:pizz_lecious/core/user_model.dart';
 import 'package:pizz_lecious/feat/add_ons_tab_view/pages/landing_page.dart';
 import 'package:pizz_lecious/feat/dessert_tab_view/pages/landing_page.dart';
@@ -36,9 +38,9 @@ class _LandingHomepageState extends State<LandingHomepage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<PizzaBloc, PizzaState>(
+    return BlocListener<AuthBloc, UserAuthState>(
       listener: (context, state) {
-        if (state is PizzaUserLogOutState) {
+        if (state is UserUnAuthenticatedState) {
           ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text("Logged out Succssfully!")));
           Navigator.pushReplacement(
@@ -54,7 +56,7 @@ class _LandingHomepageState extends State<LandingHomepage> {
                   onPressed: () {}, icon: const Icon(CupertinoIcons.cart)),
               IconButton(
                   onPressed: () {
-                    context.read<PizzaBloc>().add(PizzaLogOutEvent());
+                    context.read<AuthBloc>().add(AuthLogOutEvent());
                   },
                   icon: const Icon(Icons.logout_sharp)),
             ],
@@ -80,7 +82,6 @@ class _LandingHomepageState extends State<LandingHomepage> {
               onTap: (val) {
                 BlocProvider.of<PizzaBloc>(context)
                     .add(PizzaOnTabChangeEvent(tab: val));
-                print(pizzaBloc.initialIndex);
               },
               items: HomeConstants.navBarIcons),
           body: BlocConsumer<PizzaBloc, PizzaState>(

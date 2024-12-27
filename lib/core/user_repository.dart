@@ -6,10 +6,10 @@ class UserAuthRepository {
     await _firebaseAuth.setSettings(appVerificationDisabledForTesting: true);
     await _firebaseAuth.setLanguageCode('en');
     try {
-      await _firebaseAuth.createUserWithEmailAndPassword(
+      final data = await _firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);
+      return data.user;
     } on FirebaseAuthException catch (e) {
-      print("12$e");
       if (e.code == 'user-not-found') {
         throw Exception('user not found');
       }
@@ -33,10 +33,11 @@ class UserAuthRepository {
 
   Future signIn({required String email, required String password}) async {
     try {
-      await _firebaseAuth.signInWithEmailAndPassword(
+      final data = await _firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
+      return data.user;
     } on FirebaseAuthException catch (e) {
-      print(e);
+      print("try ${e.code}");
       if (e.code == 'user-not-found') {
         throw Exception('user not found');
       }
@@ -53,7 +54,7 @@ class UserAuthRepository {
         throw Exception("This Id is not available please sign up!");
       }
     } catch (e) {
-      print(e);
+      print("catch $e");
       throw Exception(e);
     }
   }

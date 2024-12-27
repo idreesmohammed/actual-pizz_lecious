@@ -11,7 +11,10 @@ class UserAuthenticatedState extends UserAuthState {
 
 class LoadingState extends UserAuthState {}
 
-class UserAuthEmptyState extends UserAuthState {}
+class UserAuthEmptyState extends UserAuthState {
+  String errorMessage;
+  UserAuthEmptyState({required this.errorMessage});
+}
 
 class UserUnAuthenticatedState extends UserAuthState {}
 

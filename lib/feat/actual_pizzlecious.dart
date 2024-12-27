@@ -4,6 +4,7 @@ import 'package:pizz_lecious/core/user_bloc/user_bloc.dart';
 import 'package:pizz_lecious/core/user_bloc/user_event.dart';
 import 'package:pizz_lecious/core/user_bloc/user_state.dart';
 import 'package:pizz_lecious/core/user_repository.dart';
+import 'package:pizz_lecious/feat/add_ons_tab_view/bloc/add_ons_bloc.dart';
 import 'package:pizz_lecious/feat/home/bloc/pizza_bloc.dart';
 import 'package:pizz_lecious/feat/home/pages/home_landing_page.dart';
 import 'package:pizz_lecious/feat/login_and_signup/pages/login_and_signup_initial_tab.dart';
@@ -34,6 +35,9 @@ class ActualPizzeliciousApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => PizzaBloc(),
+        ),
+        BlocProvider(
+          create: (context) => AddOnsBloc(),
         ),
       ],
       child: MaterialApp(

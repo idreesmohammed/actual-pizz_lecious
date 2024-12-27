@@ -30,6 +30,7 @@ class _LoginSignupLandingpageState extends State<LoginSignupLandingpage>
     return Scaffold(
         backgroundColor: const Color(0xffF2C27D),
         body: BlocListener<AuthBloc, UserAuthState>(
+          bloc: context.read<AuthBloc>(),
           listener: (context, state) {
             if (state is UserAuthenticatedState) {
               Navigator.pushReplacement(
@@ -46,7 +47,7 @@ class _LoginSignupLandingpageState extends State<LoginSignupLandingpage>
                 children: [
                   Center(
                     child: SizedBox(
-                      height: MediaQuery.sizeOf(context).height / 1.8,
+                      height: MediaQuery.sizeOf(context).height / 1.4,
                       child: Column(
                         children: [
                           Padding(

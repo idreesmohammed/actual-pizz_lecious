@@ -21,8 +21,13 @@ class AuthBloc extends Bloc<AuthEvent, UserAuthState> {
           emit(LoadingState());
           final user = await authRepo.signIn(
               email: event.email, password: event.password);
-          emit(UserAuthenticatedState(user: user));
+
+          if (user != null) {
+            emit(UserAuthenticatedState(user: user));
+          }
+          print("hello try ");
         } catch (e) {
+          print("hello catch $e");
           emit(AuthErrorState(errorMessage: e.toString()));
         }
       },
@@ -44,8 +49,9 @@ class AuthBloc extends Bloc<AuthEvent, UserAuthState> {
         }
       },
     );
-    on<AuthEmptyEvent>((event, emit) async {
-      emit(UserAuthEmptyState());
+    on<AuthEmptyEvent>((event, emit) {
+      emit(UserAuthEmptyState(errorMessage: event.message));
+      emit(UserAuthInitialState());
     });
     on<AuthLogOutEvent>(
       (event, emit) async {

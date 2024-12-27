@@ -1,19 +1,20 @@
-import 'dart:math';
-
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pizz_lecious/core/global_set_height_width.dart';
 import 'package:pizz_lecious/core/user_bloc/user_bloc.dart';
-import 'package:pizz_lecious/core/user_bloc/user_event.dart';
-import 'package:pizz_lecious/core/user_bloc/user_state.dart';
 import 'package:pizz_lecious/core/user_model.dart';
+import 'package:pizz_lecious/feat/add_ons_tab_view/pages/landing_page.dart';
+import 'package:pizz_lecious/feat/dessert_tab_view/pages/landing_page.dart';
 import 'package:pizz_lecious/feat/home/bloc/pizza_bloc.dart';
 import 'package:pizz_lecious/feat/home/bloc/pizza_event.dart';
 import 'package:pizz_lecious/feat/home/bloc/pizza_state.dart';
+import 'package:pizz_lecious/feat/home/constants/constants.dart';
 import 'package:pizz_lecious/feat/home/models/pizza_model.dart';
-import 'package:pizz_lecious/feat/home/pages/product_detail_view.dart';
+import 'package:pizz_lecious/feat/home/pages/landing_page.dart';
 import 'package:pizz_lecious/feat/login_and_signup/pages/login_and_signup_initial_tab.dart';
+import 'package:pizz_lecious/feat/product_detail_view/pages/product_detail_view.dart';
 
 class LandingHomepage extends StatefulWidget {
   const LandingHomepage({super.key});
@@ -70,8 +71,20 @@ class _LandingHomepageState extends State<LandingHomepage> {
               ],
             ),
           ),
+          bottomNavigationBar: CurvedNavigationBar(
+              animationDuration: const Duration(milliseconds: 300),
+              color: Colors.blue.withOpacity(0.7),
+              backgroundColor: Colors.transparent,
+              height: 60,
+              index: context.read<PizzaBloc>().initialIndex,
+              onTap: (val) {
+                BlocProvider.of<PizzaBloc>(context)
+                    .add(PizzaOnTabChangeEvent(tab: val));
+                print(pizzaBloc.initialIndex);
+              },
+              items: HomeConstants.navBarIcons),
           body: BlocConsumer<PizzaBloc, PizzaState>(
-              bloc: context.read<PizzaBloc>()..add(PizzaGetEvent()),
+              bloc: pizzaBloc,
               listener: (context, state) {
                 if (state is PizzaUserLogOutState) {
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -82,183 +95,21 @@ class _LandingHomepageState extends State<LandingHomepage> {
                           builder: (context) =>
                               const LoginSignupLandingpage()));
                 }
-
-                // if (state is UserUnAuthenticatedState) {
-                //   ScaffoldMessenger.of(context).showSnackBar(
-                //       const SnackBar(content: Text("Logged out Succssfully!")));
-                //   Navigator.pushReplacement(
-                //       context,
-                //       MaterialPageRoute(
-                //           builder: (context) => const LoginSignupLandingpage()));
-                // }
               },
               builder: (context, state) {
-                if (state is PizzaLoadFailureState) {
-                  return Center(child: Text(state.errorMessage));
-                }
-                if (state is PizzaLoadingState) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
+                if (state is PizzaOnTabChangeState) {
+                  if (state.tabChange == 1) {
+                    return const AddOnLandingPage();
+                  }
+                  if (state.tabChange == 2) {
+                    return const DessertLandingPage();
+                  }
+                  if (state.tabChange == 0) {
+                    return const HomeActualLandingPage();
+                  }
                 }
 
-                if (state is PizzaLoadedSuccessState) {
-                  List<PizzaModel> pizza = state.pizzaModel;
-                  return Padding(
-                      padding: const EdgeInsets.all(5),
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height:
-                                GlobalSetHeightWidth.getHeight(context) * 0.79,
-                            width: GlobalSetHeightWidth.getWidth(context),
-                            child: GridView.builder(
-                              itemCount: pizza.length,
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2,
-                                      crossAxisSpacing: 16,
-                                      mainAxisSpacing: 16,
-                                      childAspectRatio: 9 / 16),
-                              itemBuilder: (context, index) {
-                                return Material(
-                                  elevation: 5,
-                                  color: Colors.white,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20)),
-                                  child: InkWell(
-                                    onTap: () => Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              const ProductDetailView(),
-                                        )),
-                                    child: Column(
-                                      children: [
-                                        Image.asset(
-                                            'assets/whole-cheese-pizza-with-slice-removebg-preview.png'),
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 8.0, bottom: 10, right: 8),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceAround,
-                                            children: [
-                                              Container(
-                                                height: GlobalSetHeightWidth
-                                                        .getHeight(context) *
-                                                    0.02,
-                                                width: GlobalSetHeightWidth
-                                                        .getWidth(context) *
-                                                    0.15,
-                                                decoration: BoxDecoration(
-                                                    color: Colors.red
-                                                        .withOpacity(0.8),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            20)),
-                                                child: const Center(
-                                                    child: Text(
-                                                  "NON-VEG",
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 10),
-                                                )),
-                                              ),
-                                              Container(
-                                                height: GlobalSetHeightWidth
-                                                        .getHeight(context) *
-                                                    0.02,
-                                                width: GlobalSetHeightWidth
-                                                        .getWidth(context) *
-                                                    0.2,
-                                                decoration: BoxDecoration(
-                                                    color: Colors.grey
-                                                        .withOpacity(0.5),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            20)),
-                                                child: const Center(
-                                                    child: Text(
-                                                  "Extra cheese",
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 10),
-                                                )),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        Center(
-                                          child: Text(
-                                              pizza[index].name.toUpperCase(),
-                                              style: const TextStyle(
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.bold)),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 8.0, top: 5),
-                                          child: Align(
-                                              alignment: Alignment.centerLeft,
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  const Text("description...."),
-                                                  Text("${pizza[index].price}",
-                                                      style: const TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold))
-                                                ],
-                                              )),
-                                        ),
-                                        Align(
-                                          alignment: Alignment.centerRight,
-                                          child: IconButton(
-                                              onPressed: () {},
-                                              icon: const Icon(
-                                                  color: Colors.black87,
-                                                  CupertinoIcons
-                                                      .add_circled_solid)),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                          const Expanded(
-                              child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Padding(
-                              padding: EdgeInsets.only(top: 5),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Chip(label: Text("label1")),
-                                  SizedBox(width: 6),
-                                  Chip(label: Text("label1")),
-                                  SizedBox(width: 6),
-                                  Chip(label: Text("label1")),
-                                  SizedBox(width: 6),
-                                  Chip(label: Text("label1")),
-                                  SizedBox(width: 6),
-                                  Chip(label: Text("label1")),
-                                  SizedBox(width: 6),
-                                  Chip(label: Text("label1"))
-                                ],
-                              ),
-                            ),
-                          ))
-                        ],
-                      ));
-                }
-                return Text('somethingwent wrong');
+                return const HomeActualLandingPage();
               })),
     );
   }

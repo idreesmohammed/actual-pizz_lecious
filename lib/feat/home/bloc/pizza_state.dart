@@ -17,3 +17,8 @@ class PizzaLoadFailureState extends PizzaState {
 }
 
 class PizzaUserLogOutState extends PizzaState {}
+
+class PizzaOnTabChangeState extends PizzaState {
+  int tabChange;
+  PizzaOnTabChangeState({required this.tabChange});
+}

@@ -6,6 +6,7 @@ import 'package:pizz_lecious/feat/home/bloc/pizza_state.dart';
 import 'package:pizz_lecious/feat/home/service/get_all_products_repository_service.dart';
 
 class PizzaBloc extends Bloc<PizzaEvent, PizzaState> {
+  int initialIndex = 0;
   PizzaBloc() : super(PizzaInitialState()) {
     UserAuthRepository user = UserAuthRepository();
     GetAllProductsRepositoryService getAllProductsRepositoryService =
@@ -26,6 +27,18 @@ class PizzaBloc extends Bloc<PizzaEvent, PizzaState> {
     on<PizzaLogOutEvent>(
       (event, emit) async {
         user.logOut();
+      },
+    );
+    on<PizzaOnTabChangeEvent>(
+      (event, emit) {
+        initialIndex = event.tab;
+        try {
+          print("eventindex ${event.tab}");
+          print("indexChange $initialIndex");
+          emit(PizzaOnTabChangeState(tabChange: initialIndex));
+        } catch (e) {
+          emit(PizzaLoadFailureState(errorMessage: e.toString()));
+        }
       },
     );
   }

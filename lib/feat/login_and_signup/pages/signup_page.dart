@@ -28,6 +28,10 @@ class _SignUpPageState extends State<SignUpPage> {
           ScaffoldMessenger.of(context)
               .showSnackBar(SnackBar(content: Text(state.errorMessage)));
         }
+        if (state is UserAuthenticatedState) {
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => const LandingHomepage()));
+        }
 
         if (state is AuthErrorState) {
           ScaffoldMessenger.of(context)

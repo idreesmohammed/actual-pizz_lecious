@@ -75,7 +75,7 @@ class _LandingHomepageState extends State<LandingHomepage> {
           ),
           bottomNavigationBar: CurvedNavigationBar(
               animationDuration: const Duration(milliseconds: 300),
-              color: Colors.blue.withOpacity(0.7),
+              color: Theme.of(context).primaryColor,
               backgroundColor: Colors.transparent,
               height: 60,
               index: context.read<PizzaBloc>().initialIndex,

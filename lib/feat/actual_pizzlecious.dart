@@ -41,10 +41,7 @@ class ActualPizzeliciousApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        theme: ThemeData(
-            colorScheme: ColorScheme.light(
-          surface: Colors.grey.shade200,
-        )),
+        theme: ThemeData(primaryColor: Colors.blue.withOpacity(0.7)),
         locale: const Locale('en', 'us'),
         title: "Pizza Lecious :-)",
         debugShowCheckedModeBanner: false,
@@ -62,8 +59,6 @@ class ActualPizzeliciousApp extends StatelessWidget {
                       state.errorMessage.replaceAll('Exception:', 'Error-'))));
             }
             if (state is UserUnAuthenticatedState) {
-              // ScaffoldMessenger.of(context).showSnackBar(
-              //     const SnackBar(content: Text("Logged out Successfully!")));
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
@@ -75,10 +70,6 @@ class ActualPizzeliciousApp extends StatelessWidget {
             }
           },
           builder: (context, state) {
-            // if (state is UserUnAuthenticatedState) {
-            //   print("no user");
-            //   const LoginSignupLandingpage();
-            // }
             if (state is LoadingState) {
               return const Center(child: CircularProgressIndicator());
             } else {

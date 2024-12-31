@@ -9,7 +9,9 @@ class AuthSignInClickEvent extends AuthEvent {
 class AuthSignUpClickEvent extends AuthEvent {
   final String email;
   final String password;
-  AuthSignUpClickEvent({required this.email, required this.password});
+  final String name;
+  AuthSignUpClickEvent(
+      {required this.email, required this.password, required this.name});
 }
 
 class AuthLogOutEvent extends AuthEvent {}

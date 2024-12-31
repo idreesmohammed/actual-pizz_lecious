@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pizz_lecious/core/user_bloc/user_event.dart';
 import 'package:pizz_lecious/core/user_bloc/user_state.dart';
+import 'package:pizz_lecious/core/user_model.dart';
 import 'package:pizz_lecious/core/user_repository.dart';
 
 class AuthBloc extends Bloc<AuthEvent, UserAuthState> {
@@ -40,6 +41,10 @@ class AuthBloc extends Bloc<AuthEvent, UserAuthState> {
               email: event.email, password: event.password);
 
           if (user != null) {
+            UserModel userModel = UserModel(
+                displayName: event.name, email: event.email, uid: event.email);
+            authRepo.setUserData(userModel: userModel, docName: event.email);
+
             emit(UserAuthenticatedState(user: user));
           }
           print("hello try ");

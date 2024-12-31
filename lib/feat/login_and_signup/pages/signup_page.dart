@@ -150,7 +150,9 @@ class _SignUpPageState extends State<SignUpPage> {
                 } else {
                   try {
                     context.read<AuthBloc>().add(AuthSignUpClickEvent(
-                        email: email.text, password: password.text));
+                        email: email.text,
+                        password: password.text,
+                        name: name.text));
                   } catch (e) {
                     throw Exception(e);
                   }

@@ -1,4 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:pizz_lecious/core/common_firebase_firestore_instance.dart';
+import 'package:pizz_lecious/core/user_model.dart';
 
 class UserAuthRepository {
   final _firebaseAuth = FirebaseAuth.instance;
@@ -62,4 +64,11 @@ class UserAuthRepository {
   Future<void> logOut() async => await _firebaseAuth.signOut();
 
   Future<User?> getCurrentUser() async => _firebaseAuth.currentUser;
+  Future setUserData(
+      {required UserModel userModel, required String docName}) async {
+    return CommonFirebaseFirestoreInstance.snapShot
+        .collection('users')
+        .doc(docName)
+        .set(userModel.toMap());
+  }
 }

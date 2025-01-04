@@ -20,6 +20,12 @@ class HomeActualLandingPage extends StatefulWidget {
 
 class _HomeActualLandingPageState extends State<HomeActualLandingPage> {
   @override
+  void initState() {
+    context.read<CartBloc>();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder(
       bloc: context.read<PizzaBloc>()..add(PizzaGetEvent()),
@@ -141,9 +147,13 @@ class _HomeActualLandingPageState extends State<HomeActualLandingPage> {
                                 Align(
                                   alignment: Alignment.centerRight,
                                   child: IconButton(
-                                      onPressed: () {
+                                      onPressed: () async {
                                         context.read<CartBloc>().add(
                                             CartAddEvent(
+                                                price: state
+                                                    .pizzaModel[index].price,
+                                                name: state
+                                                    .pizzaModel[index].name,
                                                 id: state
                                                     .pizzaModel[index].id));
                                       },

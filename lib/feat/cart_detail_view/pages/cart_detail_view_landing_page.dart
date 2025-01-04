@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pizz_lecious/core/global_set_height_width.dart';
 import 'package:pizz_lecious/feat/address_and_payment_details/pages/payment_landing_page.dart';
+import 'package:pizz_lecious/feat/cart_bloc/cart_bloc.dart';
+import 'package:pizz_lecious/feat/cart_bloc/cart_event.dart';
+import 'package:pizz_lecious/feat/cart_bloc/cart_state.dart';
+import 'package:pizz_lecious/feat/cart_detail_view/pages/no_products_view.dart';
 import 'package:pizz_lecious/feat/global_constants.dart';
 
 class CartDetailViewLandingPage extends StatefulWidget {
@@ -12,125 +18,191 @@ class CartDetailViewLandingPage extends StatefulWidget {
 }
 
 class _CartDetailViewLandingPageState extends State<CartDetailViewLandingPage> {
-  ValueNotifier<int> qty = ValueNotifier(0);
+  @override
+  void dispose() {
+    CartBloc().close();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: Stack(
-        children: [
-          SizedBox(
-            height: GlobalSetHeightWidth.getHeight(context) * 0.8,
-            child: ListView.builder(
-              itemCount: addedProductId.length,
-              itemBuilder: (context, index) {
-                qty.value = pizzaDataList[index].qty;
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    height: GlobalSetHeightWidth.getHeight(context) * 0.1,
-                    width: GlobalSetHeightWidth.getWidth(context),
-                    decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor,
-                        borderRadius: BorderRadius.circular(20)),
-                    child: Row(
-                      children: [
-                        Text((pizzaDataList
-                            .firstWhere((e) => e.id == addedProductId[index])
-                            .name)),
-                        Text((pizzaDataList
-                            .firstWhere((e) => e.id == addedProductId[index])
-                            .price
-                            .toString())),
-                        IconButton(
-                            onPressed: () {
-                              qty.value--;
-                            },
-                            icon: const Icon(Icons.minimize_outlined)),
-                        Text((qty.value + 1).toString()),
-                        IconButton(
-                            onPressed: () {
-                              qty.value++;
-                            },
-                            icon: const Icon(Icons.add))
-                      ],
+    return Stack(
+      children: [
+        BlocConsumer<CartBloc, CartState>(
+          bloc: context.read<CartBloc>(),
+          listener: (context, state) {
+            if (state is CartEmptyState) {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const NoProductsView()));
+            }
+          },
+          builder: (context, state) {
+            state as CartAddedState;
+            return SizedBox(
+              height: GlobalSetHeightWidth.getHeight(context) * 0.8,
+              child: ListView.builder(
+                itemCount: (state).cartList.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.only(left: 8),
+                        height: GlobalSetHeightWidth.getHeight(context) * 0.12,
+                        width: GlobalSetHeightWidth.getWidth(context),
+                        decoration: BoxDecoration(
+                            color: Theme.of(context).primaryColorLight,
+                            borderRadius: BorderRadius.circular(20)),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Row(
+                              children: [
+                                Text(
+                                  (state).cartList[index].productName,
+                                  style: const TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                const Spacer(),
+                                Text(
+                                    (state.cartList[index].productPrice *
+                                            state.cartList[index].qty)
+                                        .toString(),
+                                    style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold)),
+                                const Spacer(),
+                                Text(
+                                  'Qty: ${state.cartList[index].qty.toString()}',
+                                  style: const TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                const Spacer(),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                IconButton(
+                                    onPressed: () {
+                                      context.read<CartBloc>().add(
+                                          CartProductQtyDecrementEvent(
+                                              qty: state.cartList[index].qty));
+                                    },
+                                    icon: const FaIcon(
+                                      FontAwesomeIcons.minus,
+                                      size: 20,
+                                    )),
+                                Text(
+                                  'x${state.cartList[index].qty.toString()}',
+                                  style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                IconButton(
+                                    onPressed: () {
+                                      context.read<CartBloc>().add(
+                                          CartProductQtyIncementEvent(
+                                              qty: state.cartList[index].qty));
+                                    },
+                                    icon: const FaIcon(
+                                      FontAwesomeIcons.plus,
+                                      size: 20,
+                                    )),
+                                IconButton(
+                                    onPressed: () async {
+                                      context.read<CartBloc>().add(
+                                          CartProductRemoveEvent(index: index));
+                                    },
+                                    icon: const FaIcon(
+                                      FontAwesomeIcons.trash,
+                                      size: 20,
+                                    ))
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
                     ),
+                  );
+                },
+              ),
+            );
+          },
+        ),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Container(
+            height: GlobalSetHeightWidth.getHeight(context) * 0.1,
+            decoration: const BoxDecoration(
+                color: Colors.grey,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(30),
+                    topRight: Radius.circular(30))),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Proceed to checkout',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                   ),
-                );
-              },
-            ),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              height: GlobalSetHeightWidth.getHeight(context) * 0.1,
-              decoration: const BoxDecoration(
-                  color: Colors.grey,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(30),
-                      topRight: Radius.circular(30))),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'Proceed to checkout',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                    ),
-                    IconButton(
-                        onPressed: () {
-                          showModalBottomSheet(
-                            context: context,
-                            builder: (context) {
-                              return SizedBox(
-                                  height: 200,
-                                  width: double.infinity,
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      TextButton(
-                                          onPressed: () {},
-                                          child: const Text(
-                                            "Cash On Delivery",
-                                            style: TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold),
-                                          )),
-                                      TextButton(
-                                          onPressed: () {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        const PaymentLandingPage()));
-                                          },
-                                          child: const Text(
-                                            "Card",
-                                            style: TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold),
-                                          ))
-                                    ],
-                                  ));
-                            },
-                          );
-                        },
-                        icon: const Icon(
-                          Icons.arrow_forward,
-                          size: 30,
-                          fill: 1,
-                        ))
-                  ],
-                ),
+                  IconButton(
+                      onPressed: () {
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (context) {
+                            return SizedBox(
+                                height: 200,
+                                width: double.infinity,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    TextButton(
+                                        onPressed: () {},
+                                        child: const Text(
+                                          "Cash On Delivery",
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold),
+                                        )),
+                                    TextButton(
+                                        onPressed: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const PaymentLandingPage()));
+                                        },
+                                        child: const Text(
+                                          "Card",
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold),
+                                        ))
+                                  ],
+                                ));
+                          },
+                        );
+                      },
+                      icon: const Icon(
+                        Icons.arrow_forward,
+                        size: 30,
+                        fill: 1,
+                      ))
+                ],
               ),
             ),
-          )
-        ],
-      ),
+          ),
+        )
+      ],
     );
   }
 }

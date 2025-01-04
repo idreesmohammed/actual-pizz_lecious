@@ -8,8 +8,9 @@ import 'package:pizz_lecious/core/user_bloc/user_state.dart';
 import 'package:pizz_lecious/core/user_model.dart';
 import 'package:pizz_lecious/feat/add_ons_tab_view/pages/landing_page.dart';
 import 'package:pizz_lecious/feat/cart_bloc/cart_bloc.dart';
+import 'package:pizz_lecious/feat/cart_bloc/cart_event.dart';
 import 'package:pizz_lecious/feat/cart_bloc/cart_state.dart';
-import 'package:pizz_lecious/feat/cart_detail_view/pages/cart_detail_view_landing_page.dart';
+import 'package:pizz_lecious/feat/cart_detail_view/pages/initial_page.dart';
 import 'package:pizz_lecious/feat/dessert_tab_view/pages/landing_page.dart';
 import 'package:pizz_lecious/feat/global_constants.dart';
 import 'package:pizz_lecious/feat/home/bloc/pizza_bloc.dart';
@@ -66,24 +67,26 @@ class _LandingHomepageState extends State<LandingHomepage> {
                   bloc: cartBloc,
                   builder: (context, state) {
                     return Badge(
-                      isLabelVisible: addedProductId.isEmpty ? false : true,
+                      isLabelVisible: cartList.isEmpty ? false : true,
                       label: BlocBuilder<CartBloc, CartState>(
                         builder: (context, state) {
                           if (state is CartInitialState) {
-                            return Text(state.id.toString());
+                            return Text(state.cartList.length.toString());
                           }
                           if (state is CartAddedState) {
-                            return Text(state.id.toString());
+                            return Text(state.cartList.length.toString());
                           }
-                          return Text(addedProductId.length.toString());
+                          return Text(cartList.length.toString());
                         },
                       ),
                       child: IconButton(
-                          onPressed: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const CartDetailViewLandingPage())),
+                          onPressed: () async {
+                            cartBloc.add(CartReInitializeCartEvent());
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const InitialPage()));
+                          },
                           icon: const Icon(CupertinoIcons.cart)),
                     );
                   },

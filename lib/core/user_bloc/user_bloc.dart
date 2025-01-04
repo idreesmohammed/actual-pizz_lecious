@@ -26,9 +26,7 @@ class AuthBloc extends Bloc<AuthEvent, UserAuthState> {
           if (user != null) {
             emit(UserAuthenticatedState(user: user));
           }
-          print("hello try ");
         } catch (e) {
-          print("hello catch $e");
           emit(AuthErrorState(errorMessage: e.toString()));
         }
       },
@@ -47,9 +45,7 @@ class AuthBloc extends Bloc<AuthEvent, UserAuthState> {
 
             emit(UserAuthenticatedState(user: user));
           }
-          print("hello try ");
         } catch (e) {
-          print("hello catch $e");
           emit(AuthErrorState(errorMessage: e.toString()));
         }
       },

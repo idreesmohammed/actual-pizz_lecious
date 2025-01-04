@@ -28,7 +28,6 @@ class UserAuthRepository {
         throw Exception("This Id is not available please sign up!");
       }
     } catch (e) {
-      print("12$e");
       throw Exception(e);
     }
   }
@@ -39,7 +38,6 @@ class UserAuthRepository {
           email: email, password: password);
       return data.user;
     } on FirebaseAuthException catch (e) {
-      print("try ${e.code}");
       if (e.code == 'user-not-found') {
         throw Exception('user not found');
       }
@@ -56,7 +54,6 @@ class UserAuthRepository {
         throw Exception("This Id is not available please sign up!");
       }
     } catch (e) {
-      print("catch $e");
       throw Exception(e);
     }
   }

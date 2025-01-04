@@ -33,13 +33,20 @@ class PizzaBloc extends Bloc<PizzaEvent, PizzaState> {
       (event, emit) {
         initialIndex = event.tab;
         try {
-          print("eventindex ${event.tab}");
-          print("indexChange $initialIndex");
           emit(PizzaOnTabChangeState(tabChange: initialIndex));
         } catch (e) {
           emit(PizzaLoadFailureState(errorMessage: e.toString()));
         }
       },
     );
+    //   on<PizzaAddToCartEvent>(
+    //     (event, emit) {
+    //       if (!addedProductId.contains(event.id) || addedProductId.isEmpty) {
+    //         addedProductId.add(event.id);
+    //         l.e(addedProductId);
+    //         emit(PizzaAddedState(idLength: addedProductId.length));
+    //       }
+    //     },
+    //   );
   }
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pizz_lecious/core/global_set_height_width.dart';
 import 'package:pizz_lecious/feat/add_ons_tab_view/bloc/add_ons_bloc.dart';
 import 'package:pizz_lecious/feat/add_ons_tab_view/bloc/add_ons_event.dart';
 import 'package:pizz_lecious/feat/add_ons_tab_view/bloc/add_ons_state.dart';

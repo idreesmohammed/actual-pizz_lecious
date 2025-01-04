@@ -22,3 +22,8 @@ class PizzaOnTabChangeState extends PizzaState {
   int tabChange;
   PizzaOnTabChangeState({required this.tabChange});
 }
+
+class PizzaAddedState extends PizzaState {
+  int idLength;
+  PizzaAddedState({required this.idLength});
+}

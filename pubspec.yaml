@@ -18,6 +18,9 @@ dependencies:
   cloud_firestore: ^5.6.0
   curved_navigation_bar: ^1.0.6
   font_awesome_flutter: ^10.8.0
+  logger:
+  shared_preferences:
+  flutter_credit_card:
 
 dev_dependencies:
   flutter_test:

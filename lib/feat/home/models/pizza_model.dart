@@ -5,7 +5,7 @@ class PizzaModel {
   bool isVegan;
   double price;
   double discount;
-  List<dynamic> toppings;
+  int qty;
   PizzaModel(
       {required this.discount,
       required this.id,
@@ -13,7 +13,7 @@ class PizzaModel {
       required this.isVegan,
       required this.name,
       required this.price,
-      required this.toppings});
+      required this.qty});
   factory PizzaModel.fromDocument(Map<String, dynamic> doc) {
     return PizzaModel(
         discount: doc['discount'].toDouble(),
@@ -22,11 +22,6 @@ class PizzaModel {
         isVegan: doc['isVegan'],
         name: doc['name'],
         price: doc['price'].toDouble(),
-        toppings: doc['toppings'].toList());
+        qty: 0);
   }
-}
-
-class Toppings {
-  String toppings;
-  Toppings({required this.toppings});
 }

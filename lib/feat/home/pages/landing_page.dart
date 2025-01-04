@@ -2,6 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pizz_lecious/core/global_set_height_width.dart';
+import 'package:pizz_lecious/feat/cart_bloc/cart_bloc.dart';
+import 'package:pizz_lecious/feat/cart_bloc/cart_event.dart';
+import 'package:pizz_lecious/feat/global_constants.dart';
 import 'package:pizz_lecious/feat/home/bloc/pizza_bloc.dart';
 import 'package:pizz_lecious/feat/home/bloc/pizza_event.dart';
 import 'package:pizz_lecious/feat/home/bloc/pizza_state.dart';
@@ -28,6 +31,7 @@ class _HomeActualLandingPageState extends State<HomeActualLandingPage> {
         }
         if (state is PizzaLoadedSuccessState) {
           List<PizzaModel> pizza = state.pizzaModel;
+
           return Padding(
               padding: const EdgeInsets.all(5),
               child: Column(
@@ -44,6 +48,10 @@ class _HomeActualLandingPageState extends State<HomeActualLandingPage> {
                               mainAxisSpacing: 16,
                               childAspectRatio: 9 / 16),
                       itemBuilder: (context, index) {
+                        if (pizzaDataList.isEmpty) {
+                          pizzaDataList = pizza;
+                          l.e(pizzaDataList.length);
+                        }
                         return Material(
                           elevation: 5,
                           color: Colors.white,
@@ -133,7 +141,12 @@ class _HomeActualLandingPageState extends State<HomeActualLandingPage> {
                                 Align(
                                   alignment: Alignment.centerRight,
                                   child: IconButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        context.read<CartBloc>().add(
+                                            CartAddEvent(
+                                                id: state
+                                                    .pizzaModel[index].id));
+                                      },
                                       icon: const Icon(
                                           color: Colors.black87,
                                           CupertinoIcons.add_circled_solid)),

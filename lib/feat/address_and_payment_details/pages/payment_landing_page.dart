@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
 import 'package:pizz_lecious/core/global_set_height_width.dart';
+import 'package:pizz_lecious/feat/cart_detail_view/pages/address_details_view.dart';
 
 class PaymentLandingPage extends StatefulWidget {
   const PaymentLandingPage({super.key});
@@ -99,6 +100,11 @@ class _PaymentLandingPageState extends State<PaymentLandingPage> {
 
   void _onValidate() {
     if (formKey.currentState?.validate() ?? false) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const AddressDetailsView(paymentType: 'CARD'),
+          ));
     } else {}
   }
 }

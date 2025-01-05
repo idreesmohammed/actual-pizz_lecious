@@ -6,6 +6,7 @@ import 'package:pizz_lecious/feat/address_and_payment_details/pages/payment_land
 import 'package:pizz_lecious/feat/cart_bloc/cart_bloc.dart';
 import 'package:pizz_lecious/feat/cart_bloc/cart_event.dart';
 import 'package:pizz_lecious/feat/cart_bloc/cart_state.dart';
+import 'package:pizz_lecious/feat/cart_detail_view/pages/address_details_view.dart';
 import 'package:pizz_lecious/feat/cart_detail_view/pages/no_products_view.dart';
 import 'package:pizz_lecious/feat/global_constants.dart';
 
@@ -47,86 +48,81 @@ class _CartDetailViewLandingPageState extends State<CartDetailViewLandingPage> {
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Expanded(
-                      child: Container(
-                        padding: const EdgeInsets.only(left: 8),
-                        height: GlobalSetHeightWidth.getHeight(context) * 0.12,
-                        width: GlobalSetHeightWidth.getWidth(context),
-                        decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColorLight,
-                            borderRadius: BorderRadius.circular(20)),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Row(
-                              children: [
-                                Text(
-                                  (state).cartList[index].productName,
-                                  style: const TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                const Spacer(),
-                                Text(
-                                    (state.cartList[index].productPrice *
-                                            state.cartList[index].qty)
-                                        .toString(),
-                                    style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold)),
-                                const Spacer(),
-                                Text(
-                                  'Qty: ${state.cartList[index].qty.toString()}',
-                                  style: const TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                const Spacer(),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                IconButton(
-                                    onPressed: () {
-                                      context.read<CartBloc>().add(
-                                          CartProductQtyDecrementEvent(
-                                              qty: state.cartList[index].qty));
-                                    },
-                                    icon: const FaIcon(
-                                      FontAwesomeIcons.minus,
-                                      size: 20,
-                                    )),
-                                Text(
-                                  'x${state.cartList[index].qty.toString()}',
+                    child: Container(
+                      padding: const EdgeInsets.only(left: 8),
+                      height: GlobalSetHeightWidth.getHeight(context) * 0.12,
+                      width: GlobalSetHeightWidth.getWidth(context),
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).primaryColorLight,
+                          borderRadius: BorderRadius.circular(20)),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                (state).cartList[index].productName,
+                                style: const TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold),
+                              ),
+                              const Spacer(),
+                              Text(
+                                  (state.cartList[index].productPrice *
+                                          state.cartList[index].qty)
+                                      .toString(),
                                   style: const TextStyle(
                                       fontSize: 16,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                IconButton(
-                                    onPressed: () {
-                                      context.read<CartBloc>().add(
-                                          CartProductQtyIncementEvent(
-                                              qty: state.cartList[index].qty));
-                                    },
-                                    icon: const FaIcon(
-                                      FontAwesomeIcons.plus,
-                                      size: 20,
-                                    )),
-                                IconButton(
-                                    onPressed: () async {
-                                      context.read<CartBloc>().add(
-                                          CartProductRemoveEvent(index: index));
-                                    },
-                                    icon: const FaIcon(
-                                      FontAwesomeIcons.trash,
-                                      size: 20,
-                                    ))
-                              ],
-                            )
-                          ],
-                        ),
+                                      fontWeight: FontWeight.bold)),
+                              const Spacer(),
+                              Text(
+                                'Qty: ${state.cartList[index].qty.toString()}',
+                                style: const TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold),
+                              ),
+                              const Spacer(),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              IconButton(
+                                  onPressed: () {
+                                    context.read<CartBloc>().add(
+                                        CartProductQtyDecrementEvent(
+                                            qty: state.cartList[index].qty));
+                                  },
+                                  icon: const FaIcon(
+                                    FontAwesomeIcons.minus,
+                                    size: 20,
+                                  )),
+                              Text(
+                                'x${state.cartList[index].qty.toString()}',
+                                style: const TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.bold),
+                              ),
+                              IconButton(
+                                  onPressed: () {
+                                    context.read<CartBloc>().add(
+                                        CartProductQtyIncementEvent(
+                                            qty: state.cartList[index].qty));
+                                  },
+                                  icon: const FaIcon(
+                                    FontAwesomeIcons.plus,
+                                    size: 20,
+                                  )),
+                              IconButton(
+                                  onPressed: () async {
+                                    context.read<CartBloc>().add(
+                                        CartProductRemoveEvent(index: index));
+                                  },
+                                  icon: const FaIcon(
+                                    FontAwesomeIcons.trash,
+                                    size: 20,
+                                  ))
+                            ],
+                          )
+                        ],
                       ),
                     ),
                   );
@@ -159,19 +155,37 @@ class _CartDetailViewLandingPageState extends State<CartDetailViewLandingPage> {
                           context: context,
                           builder: (context) {
                             return SizedBox(
-                                height: 200,
+                                height: 100,
                                 width: double.infinity,
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     TextButton(
-                                        onPressed: () {},
-                                        child: const Text(
-                                          "Cash On Delivery",
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold),
+                                        onPressed: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const AddressDetailsView(
+                                                        paymentType: "CASH",
+                                                      )));
+                                        },
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            const FaIcon(
+                                                FontAwesomeIcons.dollarSign),
+                                            Text(
+                                              "Cash",
+                                              style: TextStyle(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Theme.of(context)
+                                                      .primaryColor),
+                                            ),
+                                          ],
                                         )),
                                     TextButton(
                                         onPressed: () {
@@ -181,11 +195,20 @@ class _CartDetailViewLandingPageState extends State<CartDetailViewLandingPage> {
                                                   builder: (context) =>
                                                       const PaymentLandingPage()));
                                         },
-                                        child: const Text(
-                                          "Card",
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            const Icon(Icons.credit_card),
+                                            Text(
+                                              "Card",
+                                              style: TextStyle(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Theme.of(context)
+                                                      .primaryColor),
+                                            ),
+                                          ],
                                         ))
                                   ],
                                 ));

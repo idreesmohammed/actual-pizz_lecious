@@ -8,7 +8,6 @@ import 'package:pizz_lecious/feat/cart_bloc/cart_event.dart';
 import 'package:pizz_lecious/feat/cart_bloc/cart_state.dart';
 import 'package:pizz_lecious/feat/cart_detail_view/pages/address_details_view.dart';
 import 'package:pizz_lecious/feat/cart_detail_view/pages/no_products_view.dart';
-import 'package:pizz_lecious/feat/global_constants.dart';
 
 class CartDetailViewLandingPage extends StatefulWidget {
   const CartDetailViewLandingPage({super.key});

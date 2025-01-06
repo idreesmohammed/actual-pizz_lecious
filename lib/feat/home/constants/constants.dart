@@ -8,11 +8,11 @@ class HomeConstants {
       color: Colors.white,
     ),
     FaIcon(
-      Icons.icecream,
+      Icons.add_box_rounded,
       color: Colors.white,
     ),
     FaIcon(
-      Icons.add_box_rounded,
+      Icons.icecream,
       color: Colors.white,
     ),
   ];

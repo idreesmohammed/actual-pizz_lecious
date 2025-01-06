@@ -21,6 +21,7 @@ dependencies:
   logger:
   shared_preferences:
   flutter_credit_card:
+  lottie: ^2.3.2
 
 dev_dependencies:
   flutter_test:

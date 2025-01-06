@@ -37,21 +37,18 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     on<CartReInitializeCartEvent>(
         (event, emit) => emit(CartAddedState(cartList: cartList)));
     on<CartProductQtyIncementEvent>((event, emit) {
-      for (var data in cartList) {
-        data.qty++;
-      }
+      cartList[event.index].qty++;
       emit(CartAddedState(cartList: cartList));
     });
     on<CartProductQtyDecrementEvent>((event, emit) {
-      for (var data in cartList) {
-        if (event.qty > 1) {
-          data.qty--;
-        }
+      if (event.qty > 1) {
+        cartList[event.index].qty--;
       }
       emit(CartAddedState(cartList: cartList));
     });
     on<CartProductRemoveEvent>(
       (event, emit) async {
+        l.e(event.index);
         cartList.removeAt(event.index);
         emit(CartAddedState(cartList: cartList));
 
@@ -63,5 +60,15 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         }
       },
     );
+    on<CartGetTotalPriceEvent>(
+      (event, emit) {
+        getTotal(event.listData);
+        emit(CartAddedState(cartList: cartList));
+      },
+    );
+  }
+  double getTotal(event) {
+    return event.listData
+        .fold(0, (sum, product) => sum + (product.productPrice * product.qty));
   }
 }

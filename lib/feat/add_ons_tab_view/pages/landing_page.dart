@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:pizz_lecious/feat/add_ons_tab_view/bloc/add_ons_bloc.dart';
 import 'package:pizz_lecious/feat/add_ons_tab_view/bloc/add_ons_event.dart';
 import 'package:pizz_lecious/feat/add_ons_tab_view/bloc/add_ons_state.dart';
@@ -42,7 +44,19 @@ class _AddOnLandingPageState extends State<AddOnLandingPage> {
                               fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         Text(
-                            "Calories - ${state.addOnsModel[index].calories.toString()}")
+                          "Calories - ${state.addOnsModel[index].calories.toString()}",
+                          style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                              fontWeight: FontWeight.w500),
+                        ),
+                        SizedBox(
+                            height: 100,
+                            width: 150,
+                            child:
+                                Image.asset('assets/dip-removebg-preview.png')),
+                        const Align(
+                            alignment: Alignment.bottomRight,
+                            child: Icon(CupertinoIcons.add_circled_solid)),
                       ],
                     ),
                   ),

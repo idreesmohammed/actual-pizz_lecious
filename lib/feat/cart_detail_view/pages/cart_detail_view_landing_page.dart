@@ -8,6 +8,7 @@ import 'package:pizz_lecious/feat/cart_bloc/cart_event.dart';
 import 'package:pizz_lecious/feat/cart_bloc/cart_state.dart';
 import 'package:pizz_lecious/feat/cart_detail_view/pages/address_details_view.dart';
 import 'package:pizz_lecious/feat/cart_detail_view/pages/no_products_view.dart';
+import 'package:pizz_lecious/feat/global_constants.dart';
 
 class CartDetailViewLandingPage extends StatefulWidget {
   const CartDetailViewLandingPage({super.key});
@@ -19,9 +20,9 @@ class CartDetailViewLandingPage extends StatefulWidget {
 
 class _CartDetailViewLandingPageState extends State<CartDetailViewLandingPage> {
   @override
-  void dispose() {
-    CartBloc().close();
-    super.dispose();
+  void initState() {
+    getTotal();
+    super.initState();
   }
 
   @override
@@ -89,7 +90,11 @@ class _CartDetailViewLandingPageState extends State<CartDetailViewLandingPage> {
                                   onPressed: () {
                                     context.read<CartBloc>().add(
                                         CartProductQtyDecrementEvent(
+                                            index: index,
                                             qty: state.cartList[index].qty));
+                                    setState(() {
+                                      getTotal();
+                                    });
                                   },
                                   icon: const FaIcon(
                                     FontAwesomeIcons.minus,
@@ -102,9 +107,14 @@ class _CartDetailViewLandingPageState extends State<CartDetailViewLandingPage> {
                               ),
                               IconButton(
                                   onPressed: () {
+                                    l.e(index);
                                     context.read<CartBloc>().add(
                                         CartProductQtyIncementEvent(
+                                            index: index,
                                             qty: state.cartList[index].qty));
+                                    setState(() {
+                                      getTotal();
+                                    });
                                   },
                                   icon: const FaIcon(
                                     FontAwesomeIcons.plus,
@@ -112,8 +122,21 @@ class _CartDetailViewLandingPageState extends State<CartDetailViewLandingPage> {
                                   )),
                               IconButton(
                                   onPressed: () async {
-                                    context.read<CartBloc>().add(
-                                        CartProductRemoveEvent(index: index));
+                                    context
+                                        .read<CartBloc>()
+                                        .add(CartProductRemoveEvent(
+                                          index: index,
+                                        ));
+
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                            content: Text(
+                                                "Item removed successfully!")));
+                                    if (state.cartList.length == 1) {
+                                      context
+                                          .read<CartBloc>()
+                                          .add(CartReInitializeCartEvent());
+                                    }
                                   },
                                   icon: const FaIcon(
                                     FontAwesomeIcons.trash,
@@ -141,84 +164,125 @@ class _CartDetailViewLandingPageState extends State<CartDetailViewLandingPage> {
                     topRight: Radius.circular(30))),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: Column(
                 children: [
-                  const Text(
-                    'Proceed to checkout',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Spacer(),
+                        const Text(
+                          'Total',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w400),
+                        ),
+                        const Spacer(),
+                        Row(
+                          children: [
+                            FaIcon(FontAwesomeIcons.dollarSign,
+                                color: Theme.of(context).primaryColorDark,
+                                size: 20),
+                            Text(
+                              getTotal().toString(),
+                              style: TextStyle(
+                                  color: Theme.of(context).primaryColorDark,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                        const Spacer(),
+                      ],
+                    ),
                   ),
-                  IconButton(
-                      onPressed: () {
-                        showModalBottomSheet(
-                          context: context,
-                          builder: (context) {
-                            return SizedBox(
-                                height: 100,
-                                width: double.infinity,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    TextButton(
-                                        onPressed: () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      const AddressDetailsView(
-                                                        paymentType: "CASH",
-                                                      )));
-                                        },
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            const FaIcon(
-                                                FontAwesomeIcons.dollarSign),
-                                            Text(
-                                              "Cash",
-                                              style: TextStyle(
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Theme.of(context)
-                                                      .primaryColor),
-                                            ),
-                                          ],
-                                        )),
-                                    TextButton(
-                                        onPressed: () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      const PaymentLandingPage()));
-                                        },
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            const Icon(Icons.credit_card),
-                                            Text(
-                                              "Card",
-                                              style: TextStyle(
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Theme.of(context)
-                                                      .primaryColor),
-                                            ),
-                                          ],
-                                        ))
-                                  ],
-                                ));
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Proceed to checkout',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20),
+                      ),
+                      IconButton(
+                          onPressed: () {
+                            showModalBottomSheet(
+                              context: context,
+                              builder: (context) {
+                                return SizedBox(
+                                    height: 100,
+                                    width: double.infinity,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        TextButton(
+                                            onPressed: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          const AddressDetailsView(
+                                                            paymentType: "CASH",
+                                                          )));
+                                            },
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                const FaIcon(FontAwesomeIcons
+                                                    .dollarSign),
+                                                Text(
+                                                  "Cash",
+                                                  style: TextStyle(
+                                                      fontSize: 20,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Theme.of(context)
+                                                          .primaryColor),
+                                                ),
+                                              ],
+                                            )),
+                                        TextButton(
+                                            onPressed: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          const PaymentLandingPage()));
+                                            },
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                const Icon(Icons.credit_card),
+                                                Text(
+                                                  "Card",
+                                                  style: TextStyle(
+                                                      fontSize: 20,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Theme.of(context)
+                                                          .primaryColor),
+                                                ),
+                                              ],
+                                            ))
+                                      ],
+                                    ));
+                              },
+                            );
                           },
-                        );
-                      },
-                      icon: const Icon(
-                        Icons.arrow_forward,
-                        size: 30,
-                        fill: 1,
-                      ))
+                          icon: const Icon(
+                            Icons.arrow_forward,
+                            size: 30,
+                            fill: 1,
+                          ))
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -226,5 +290,10 @@ class _CartDetailViewLandingPageState extends State<CartDetailViewLandingPage> {
         )
       ],
     );
+  }
+
+  double getTotal() {
+    return cartList.fold(
+        0, (sum, product) => sum + (product.productPrice * product.qty));
   }
 }

@@ -8,3 +8,13 @@ List<PizzaModel> pizzaDataList = [];
 List<AddOnsModel> addOnsDataModelList = [];
 Logger l = Logger();
 List<CartProductModel> cartList = [];
+List<String> pizzaList = [
+  'assets/whole-cheese-pizza-with-slice-removebg-preview.png',
+  'assets/pizza3-removebg-preview.png',
+  'assets/pizza3-removebg-preview.png',
+  'assets/whole-cheese-pizza-with-slice-removebg-preview.png',
+  'assets/whole-cheese-pizza-with-slice-removebg-preview.png',
+  'assets/pizza3-removebg-preview.png',
+  'assets/pizza3-removebg-preview.png',
+  'assets/whole-cheese-pizza-with-slice-removebg-preview.png',
+];

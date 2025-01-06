@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pizz_lecious/core/global_set_height_width.dart';
+import 'package:pizz_lecious/feat/order_placed_successful_page.dart';
 
 class AddressDetailsView extends StatefulWidget {
   final String paymentType;
@@ -15,7 +17,16 @@ class _AddressDetailsViewState extends State<AddressDetailsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        actions: [
+          IconButton(
+              onPressed: () {},
+              icon: Icon(
+                FontAwesomeIcons.plus,
+                color: Theme.of(context).primaryColor,
+              ))
+        ],
+      ),
       body: SizedBox(
         height: double.infinity,
         width: double.infinity,
@@ -112,7 +123,13 @@ class _AddressDetailsViewState extends State<AddressDetailsView> {
                           color: Theme.of(context).primaryColor,
                           borderRadius: BorderRadius.circular(15)),
                       child: InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const OrderPlacedSuccessfulPage()));
+                          },
                           child: const Center(
                             child: Text(
                               "Proceed to Place Order",

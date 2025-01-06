@@ -1,3 +1,5 @@
+import 'package:pizz_lecious/feat/cart_detail_view/models/cart_product_model.dart';
+
 abstract class CartEvent {}
 
 class CartAddEvent extends CartEvent {
@@ -9,12 +11,14 @@ class CartAddEvent extends CartEvent {
 
 class CartProductQtyIncementEvent extends CartEvent {
   int qty;
-  CartProductQtyIncementEvent({required this.qty});
+  int index;
+  CartProductQtyIncementEvent({required this.qty, required this.index});
 }
 
 class CartProductQtyDecrementEvent extends CartEvent {
   int qty;
-  CartProductQtyDecrementEvent({required this.qty});
+  int index;
+  CartProductQtyDecrementEvent({required this.qty, required this.index});
 }
 
 class CartProductRemoveEvent extends CartEvent {
@@ -23,3 +27,8 @@ class CartProductRemoveEvent extends CartEvent {
 }
 
 class CartReInitializeCartEvent extends CartEvent {}
+
+class CartGetTotalPriceEvent extends CartEvent {
+  List<CartProductModel> listData;
+  CartGetTotalPriceEvent({required this.listData});
+}
